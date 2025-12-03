@@ -66,8 +66,6 @@ public abstract class FunkinScreen implements com.badlogic.gdx.Screen {
 
     @Override
     public void render(float delta) {
-        tweenManager.update(delta);
-
         // Refresh the screen display.
         ScreenUtils.clear(bgColor);
 
@@ -116,7 +114,7 @@ public abstract class FunkinScreen implements com.badlogic.gdx.Screen {
      *
      * @param s The sprite to add to the screen.
      */
-    protected final void add(Sprite s) {
+    public void add(Sprite s) {
         if (s != null) {
             sprites.add(s);
         }

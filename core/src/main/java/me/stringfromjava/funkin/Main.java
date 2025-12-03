@@ -1,7 +1,9 @@
 package me.stringfromjava.funkin;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import me.stringfromjava.funkin.backend.display.cache.TextureCache;
+import me.stringfromjava.funkin.tween.FunkinTween;
 
 /**
  * The class that starts the game and holds the main game loop.
@@ -20,6 +22,11 @@ public class Main extends Game {
     @Override
     public void render() {
         super.render();
+
+        float delta = Gdx.graphics.getDeltaTime();
+
+        // Update the tween manager.
+        FunkinTween.globalManager.update(delta);
     }
 
     @Override
