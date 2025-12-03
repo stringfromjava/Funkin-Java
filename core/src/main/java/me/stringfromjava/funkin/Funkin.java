@@ -1,15 +1,21 @@
 package me.stringfromjava.funkin;
 
-import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import me.stringfromjava.funkin.backend.display.FunkinScreen;
 import me.stringfromjava.funkin.tween.FunkinTween;
+import me.stringfromjava.funkin.util.FunkinSignal;
+import me.stringfromjava.funkin.util.Paths;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Global manager and utility class for the game.
  * <p>
- * This is where you want to do the main things, like switching states.
+ * This is where you want to do the main things, like switching screens, playing sounds/music, etc.
  */
 public final class Funkin {
 
@@ -26,6 +32,19 @@ public final class Funkin {
      * This includes the loop, setting the current screen, and more.
      */
     public static Game game;
+
+    /**
+     * A map containing all sounds that are currently playing.
+     * <p>
+     * The key is the sound's ID (created by libGDX), and the value is the sound itself.
+     * Note that it's not recommended to access this unless you know what you're doing!
+     */
+    public static Map<Long, Sound> soundPool = new HashMap<>();
+
+    /**
+     * The object where the current music being played is stored.
+     */
+    public static Music music = null;
 
     /**
      * Has the global manager been initialized yet?
@@ -59,6 +78,7 @@ public final class Funkin {
      * @param screen The new {@code FunkinScreen} to set as the current screen.
      */
     public static void setScreen(FunkinScreen screen) {
+        Signals.preScreenSwitch.dispatch();
         if (!initialized) {
             throw new IllegalStateException("FNF:JE has not been initialized yet!");
         }
@@ -66,10 +86,87 @@ public final class Funkin {
             throw new IllegalArgumentException("Screen cannot be null!");
         }
         if (Funkin.screen != null) {
+            Funkin.screen.hide();
             Funkin.screen.dispose();
         }
         Funkin.screen = screen;
         game.setScreen(screen);
+        Signals.postScreenSwitch.dispatch();
+    }
+
+    /**
+     * Plays a sound. (Duh.)
+     *
+     * @param path The path to play the sound from.
+     * @return The sound instance itself.
+     */
+    public static Sound playSound(String path) {
+        Sound sound = Gdx.audio.newSound(Paths.asset(path));
+        long id = sound.play();
+        if (id != -1) { // libGDX will return -1 if the sound fails to play.
+            soundPool.put(id, sound);
+        }
+        return sound;
+    }
+
+    /**
+     * Plays new music. (Duh.)
+     *
+     * @param path The path to play the music from.
+     * @return The music instance itself.
+     */
+    public static Music playMusic(String path) {
+        return playMusic(path, 1.0f, true);
+    }
+
+    /**
+     * Plays new music. (Duh.)
+     *
+     * @param path   The path to play the music from.
+     * @param volume The volume to play the music at.
+     * @return The music instance itself.
+     */
+    public static Music playMusic(String path, float volume) {
+        return playMusic(path, volume, true);
+    }
+
+    /**
+     * Plays new music. (Duh.)
+     *
+     * @param path   The path to play the music from.
+     * @param volume The volume to play the music at.
+     * @param looped Should the music loop when it is finished playing?
+     * @return The music instance itself.
+     */
+    public static Music playMusic(String path, float volume, boolean looped) {
+        Music music = Gdx.audio.newMusic(Paths.asset(path));
+        if (Funkin.music != null && Funkin.music.isPlaying()) {
+            Funkin.music.stop();
+        }
+        Funkin.music = music;
+        music.setVolume(volume);
+        music.setLooping(looped);
+        music.play();
+        return music;
+    }
+
+    /**
+     * Contains all the global events that get dispatched when something happens in the game.
+     * <p>
+     * This includes anything from the screen being switched, the game updating every frame, and
+     * just about everything you can think of.
+     */
+    public static class Signals {
+
+        public static final FunkinSignal preRender = new FunkinSignal();
+        public static final FunkinSignal postRender = new FunkinSignal();
+        public static final FunkinSignal preScreenSwitch = new FunkinSignal();
+        public static final FunkinSignal postScreenSwitch = new FunkinSignal();
+        public static final FunkinSignal preGameClose = new FunkinSignal();
+        public static final FunkinSignal postGameClose = new FunkinSignal();
+
+        private Signals() {
+        }
     }
 
     private Funkin() {

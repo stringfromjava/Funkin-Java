@@ -1,6 +1,6 @@
 package me.stringfromjava.funkin.backend.display;
 
-import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,13 +18,7 @@ import java.util.ArrayList;
  * Base class for creating a better screen display
  * with more functionality than the default {@link com.badlogic.gdx.Screen} interface.
  */
-public abstract class FunkinScreen implements com.badlogic.gdx.Screen {
-
-    /**
-     * The {@link TweenManager} used for
-     * adding nice transitions (mainly for sprites).
-     */
-    protected TweenManager tweenManager;
+public abstract class FunkinScreen implements Screen {
 
     /**
      * The {@link SpriteBatch} used to render
@@ -52,7 +46,6 @@ public abstract class FunkinScreen implements com.badlogic.gdx.Screen {
 
     @Override
     public void show() {
-        tweenManager = new TweenManager();
         spriteBatch = new SpriteBatch();
 
         camera = new OrthographicCamera();

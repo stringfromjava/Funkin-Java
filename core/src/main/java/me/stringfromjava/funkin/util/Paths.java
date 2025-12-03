@@ -1,14 +1,15 @@
 package me.stringfromjava.funkin.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
  * Utility class for simplifying asset paths.
  */
-public final class PathUtil {
+public final class Paths {
 
     public static FileHandle asset(String path) {
-        return new FileHandle(path);
+        return Gdx.files.internal(path);
     }
 
     public static FileHandle shared(String path) {
@@ -19,6 +20,6 @@ public final class PathUtil {
         return shared(String.format("images/%s.png", path));
     }
 
-    private PathUtil() {
+    private Paths() {
     }
 }

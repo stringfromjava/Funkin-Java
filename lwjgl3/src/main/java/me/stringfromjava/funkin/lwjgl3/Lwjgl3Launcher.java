@@ -3,13 +3,14 @@ package me.stringfromjava.funkin.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import me.stringfromjava.funkin.Funkin;
-import me.stringfromjava.funkin.Main;
+import me.stringfromjava.funkin.FunkinGame;
 import me.stringfromjava.funkin.util.Constants;
 
 /**
  * Launches the desktop (LWJGL3) application.
  */
 public class Lwjgl3Launcher {
+
     public static void main(String[] args) {
         if (StartupHelper.startNewJvmIfRequired()) { // This handles macOS support and helps on Windows.
             return;
@@ -18,9 +19,9 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        Main main = new Main();
-        Funkin.initialize(main); // This is VERY important to do before creating the application!
-        return new Lwjgl3Application(main, getDefaultConfiguration());
+        FunkinGame game = new FunkinGame();
+        Funkin.initialize(game); // This is VERY important to do before creating the application!
+        return new Lwjgl3Application(game, getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
@@ -39,7 +40,7 @@ public class Lwjgl3Launcher {
         configuration.setWindowedMode(Constants.Display.WINDOW_WIDTH, Constants.Display.WINDOW_HEIGHT);
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .
-        configuration.setWindowIcon("icon64.png", "icon32.png", "icon16.png");
+        configuration.setWindowIcon("icon128.png", "icon64.png", "icon32.png", "icon16.png");
         return configuration;
     }
 }

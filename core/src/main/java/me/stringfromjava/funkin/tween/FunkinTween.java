@@ -2,6 +2,7 @@ package me.stringfromjava.funkin.tween;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import me.stringfromjava.funkin.tween.accessors.SpriteAccessor;
 
@@ -17,8 +18,6 @@ public final class FunkinTween {
 
     /**
      * Registers all tween accessors used in the game.
-     * <p>
-     * TODO: Make it possible to where you don't need accessors!
      */
     public static void registerAccessors() {
         Tween.registerAccessor(Sprite.class, new SpriteAccessor());
