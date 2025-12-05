@@ -1,10 +1,10 @@
 package me.stringfromjava.funkin;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import me.stringfromjava.funkin.backend.display.FunkinScreen;
+import me.stringfromjava.funkin.lua.FunkinLua;
 import me.stringfromjava.funkin.tween.FunkinTween;
 import me.stringfromjava.funkin.util.FunkinSignal;
 import me.stringfromjava.funkin.util.Paths;
@@ -28,12 +28,6 @@ public final class Funkin {
     public static FunkinScreen screen = null;
 
     /**
-     * The static instance used to access the core elements of the game.
-     * This includes the loop, setting the current screen, and more.
-     */
-    public static Game game;
-
-    /**
      * A map containing all sounds that are currently playing.
      * <p>
      * The key is the sound's ID (created by libGDX), and the value is the sound itself.
@@ -45,6 +39,17 @@ public final class Funkin {
      * The object where the current music being played is stored.
      */
     public static Music music = null;
+
+    /**
+     * The global volume multiplier for all sounds and music.
+     */
+    public static float masterVolume = 1.0f;
+
+    /**
+     * The static instance used to access the core elements of the game.
+     * This includes the loop, setting the current screen, and more.
+     */
+    private static FunkinGame game;
 
     /**
      * Has the global manager been initialized yet?
@@ -59,13 +64,14 @@ public final class Funkin {
      *
      * @param gameInstance The instance of the game to use.
      */
-    public static void initialize(Game gameInstance) {
+    public static void initialize(FunkinGame gameInstance) {
         if (initialized) {
             throw new IllegalStateException("FNF:JE has already been initialized!");
         }
         game = gameInstance;
 
         FunkinTween.registerAccessors();
+        FunkinLua.initialize();
 
         initialized = true;
     }
@@ -148,6 +154,15 @@ public final class Funkin {
         music.setLooping(looped);
         music.play();
         return music;
+    }
+
+    /**
+     * Gets the {@link FunkinGame} instance being used.
+     *
+     * @return The current {@code FunkinGame} instance.
+     */
+    public static FunkinGame getGame() {
+        return game;
     }
 
     /**

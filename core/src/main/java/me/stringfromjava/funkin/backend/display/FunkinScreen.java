@@ -42,7 +42,7 @@ public abstract class FunkinScreen implements Screen {
      */
     protected Color bgColor;
 
-    private final ArrayList<Sprite> sprites = new ArrayList<>();
+    public final ArrayList<Sprite> sprites = new ArrayList<>();
 
     @Override
     public void show() {

@@ -33,6 +33,20 @@ public class FunkinGame extends Game {
     }
 
     @Override
+    public void resume() {
+        super.resume();
+        Funkin.masterVolume = 1.0f;
+        Funkin.music.setVolume(1);
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+        Funkin.masterVolume = 0.008f;
+        Funkin.music.setVolume(0.008f);
+    }
+
+    @Override
     public void dispose() {
         Funkin.Signals.preGameClose.dispatch();
 
